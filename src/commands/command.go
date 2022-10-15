@@ -7,7 +7,7 @@ type Command struct {
 }
 
 func (c Command) VerifyCommand() bool {
-	return c.Type == "BOOK" || c.Type == "ADDITIONAL" || c.Type == "REVENUE"
+	return c.Type == BOOKCOMMAND || c.Type == ADDITIONALCOMMAND || c.Type == REVENUECOMMAND
 }
 
 type BookCommand struct {
@@ -18,14 +18,14 @@ type BookCommand struct {
 }
 
 func (b BookCommand) VerifyCommand() bool {
-	if !b.CommandType.VerifyCommand() {
+	if !b.CommandType.VerifyCommand() && b.CommandType.Type != BOOKCOMMAND {
 		return false
 	}
-	if b.VehicleType != "BIKE" && b.VehicleType != "CAR" && b.VehicleType != "SUV" {
+	if b.VehicleType != BIKE && b.VehicleType != CAR && b.VehicleType != SUV {
 		return false
 	}
 	b.EntryTime += ":00"
-	t, err := time.Parse("07:00:00", b.EntryTime)
+	t, err := time.Parse("15:04:05", b.EntryTime)
 	return err == nil && t.After(GetValidBookingStartTime()) && t.Before(GetValidBookingEndTime())
 }
 
@@ -36,10 +36,10 @@ type AdditionalCommand struct {
 }
 
 func (a AdditionalCommand) VerifyCommand() bool {
-	if !a.CommandType.VerifyCommand() {
+	if !a.CommandType.VerifyCommand() && a.CommandType.Type != ADDITIONALCOMMAND {
 		return false
 	}
 	a.ExitTime += ":00"
-	t, err := time.Parse("07:00:00", a.ExitTime)
+	t, err := time.Parse("15:04:05", a.ExitTime)
 	return err == nil && t.Before(GetValidEndTime())
 }

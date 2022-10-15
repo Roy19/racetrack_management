@@ -1,18 +1,18 @@
 package commands
 
-type CommandType string
+type CommandType int
 
 const (
-	BOOK       CommandType = "BOOK"
-	ADDITIONAL CommandType = "ADDITIONAL"
-	REVENUE    CommandType = "REVENUE"
+	BOOK CommandType = iota
+	ADDITIONAL
+	REVENUE
 )
 
-type CommandExecutionResult string
+type CommandExecutionResult int
 
 const (
-	INVALID_ENTRY_TIME CommandExecutionResult = "INVALID_ENTRY_TIME"
-	INVALID_EXIT_TIME  CommandExecutionResult = "INVALID_EXIT_TIME"
-	RACETRACK_FULL     CommandExecutionResult = "RACETRACK_FULL"
-	SUCCESS            CommandExecutionResult = "SUCCESS"
+	INVALID_ENTRY_TIME CommandExecutionResult = iota
+	INVALID_EXIT_TIME
+	RACETRACK_FULL
+	SUCCESS
 )
