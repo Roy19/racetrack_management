@@ -30,6 +30,7 @@ func TestTryBookingSlot(t *testing.T) {
 	if got != expected {
 		t.Errorf(error_format_string, "TestTryBookingSlot", slot1, got, expected)
 	}
+	// should also check if slot is appended in place
 }
 
 func TestCantBookSameSlotIfNotAvailable(t *testing.T) {
