@@ -3,7 +3,7 @@ package commands
 import (
 	"testing"
 
-	"github.com/Roy19/racetrack-management/src/interfaces"
+	"github.com/Roy19/racetrack-management/interfaces"
 )
 
 const error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: %v\n"
