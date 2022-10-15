@@ -7,19 +7,16 @@ type Vehicle struct {
 	IdentificationNumber string
 }
 
+type BookedSlot struct {
+	Vehicle   *Vehicle
+	StartTime time.Time
+	EndTime   time.Time
+}
+
 type RaceTrack struct {
 	RaceTrackType      RacetrackType
 	AllowedVehicleType VehicleType
 	BookedSlots        []*BookedSlot
-}
-
-type BookedSlot struct {
-	Vehicle  *Vehicle
-	TimeSlot time.Time
-}
-
-type RaceTrackManagement struct {
-	RaceTracks []*RaceTrack
 }
 
 func (raceTrack *RaceTrack) CheckAvailability(slot *BookedSlot) bool {
@@ -28,4 +25,39 @@ func (raceTrack *RaceTrack) CheckAvailability(slot *BookedSlot) bool {
 
 func (raceTrack *RaceTrack) AppendBookedSlot(slot *BookedSlot) {
 	raceTrack.BookedSlots = append(raceTrack.BookedSlots, slot)
+}
+
+type RaceTrackManagement struct {
+	RaceTracks []*RaceTrack
+}
+
+func (rcm *RaceTrackManagement) GetRacetrackForVehicleType(vehicleType VehicleType) []*RaceTrack {
+	var raceTracks []*RaceTrack
+	if vehicleType == BIKE {
+		for _, v := range rcm.RaceTracks {
+			if v.RaceTrackType == REGULAR && v.AllowedVehicleType == BIKE {
+				raceTracks = append(raceTracks, v)
+			}
+		}
+	} else if vehicleType == CAR {
+		for _, v := range rcm.RaceTracks {
+			if v.RaceTrackType == REGULAR && v.AllowedVehicleType == CAR {
+				raceTracks = append(raceTracks, v)
+			}
+			if v.RaceTrackType == VIP && v.AllowedVehicleType == CAR {
+				raceTracks = append(raceTracks, v)
+			}
+		}
+	} else {
+		for _, v := range rcm.RaceTracks {
+			if v.RaceTrackType == REGULAR && v.AllowedVehicleType == SUV {
+				raceTracks = append(raceTracks, v)
+			}
+			if v.RaceTrackType == VIP && v.AllowedVehicleType == SUV {
+				raceTracks = append(raceTracks, v)
+			}
+		}
+	}
+
+	return raceTracks
 }

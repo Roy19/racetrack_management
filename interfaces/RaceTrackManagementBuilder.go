@@ -11,7 +11,7 @@ type IRaceTrackManagementBuilder interface {
 }
 
 type RaceTrackManagementBuilder struct {
-	raceTracks []*models.RaceTrack
+	RaceTracks []*models.RaceTrack
 }
 
 func (rcm *RaceTrackManagementBuilder) AddRacetrackForVechicleAndRacetrackType(
@@ -24,13 +24,13 @@ func (rcm *RaceTrackManagementBuilder) AddRacetrackForVechicleAndRacetrackType(
 			RaceTrackType:      racetrackType,
 			BookedSlots:        make([]*models.BookedSlot, 0),
 		}
-		rcm.raceTracks = append(rcm.raceTracks, raceTrackForVehicleType)
+		rcm.RaceTracks = append(rcm.RaceTracks, raceTrackForVehicleType)
 	}
 	return rcm
 }
 
 func (rcm *RaceTrackManagementBuilder) BuildRacetrack() models.RaceTrackManagement {
 	raceTrackManagement := models.RaceTrackManagement{}
-	raceTrackManagement.RaceTracks = rcm.raceTracks
+	raceTrackManagement.RaceTracks = rcm.RaceTracks
 	return raceTrackManagement
 }
