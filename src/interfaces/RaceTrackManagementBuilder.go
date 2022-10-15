@@ -1,0 +1,36 @@
+package interfaces
+
+import "github.com/Roy19/racetrack-management/src/models"
+
+type IRaceTrackManagementBuilder interface {
+	AddRacetrackForVechicleAndRacetrackType(
+		vechicleType models.VehicleType,
+		racetrackType models.RacetrackType,
+		times int) IRaceTrackManagementBuilder
+	BuildRacetrack() models.RaceTrackManagement
+}
+
+type RaceTrackManagementBuilder struct {
+	raceTracks []*models.RaceTrack
+}
+
+func (rcm *RaceTrackManagementBuilder) AddRacetrackForVechicleAndRacetrackType(
+	vechicleType models.VehicleType,
+	racetrackType models.RacetrackType,
+	times int) IRaceTrackManagementBuilder {
+	for idx := 1; idx <= times; idx++ {
+		raceTrackForVehicleType := &models.RaceTrack{
+			AllowedVehicleType: vechicleType,
+			RaceTrackType:      racetrackType,
+			BookedSlots:        make([]*models.BookedSlot, 0),
+		}
+		rcm.raceTracks = append(rcm.raceTracks, raceTrackForVehicleType)
+	}
+	return rcm
+}
+
+func (rcm *RaceTrackManagementBuilder) BuildRacetrack() models.RaceTrackManagement {
+	raceTrackManagement := models.RaceTrackManagement{}
+	raceTrackManagement.RaceTracks = rcm.raceTracks
+	return raceTrackManagement
+}
