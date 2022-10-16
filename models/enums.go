@@ -7,10 +7,10 @@ const (
 	VIP
 )
 
-type VehicleType string
+type VehicleType int
 
 const (
-	BIKE VehicleType = "BIKE"
-	CAR  VehicleType = "CAR"
-	SUV  VehicleType = "SUV"
+	BIKE VehicleType = iota
+	CAR
+	SUV
 )
