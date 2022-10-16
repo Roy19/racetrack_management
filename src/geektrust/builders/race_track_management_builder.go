@@ -1,14 +1,9 @@
-package interfaces
+package builders
 
-import "geektrust/models"
-
-type IRaceTrackManagementBuilder interface {
-	AddRacetrackForVechicleAndRacetrackType(
-		vechicleType models.VehicleType,
-		racetrackType models.RacetrackType,
-		times int) IRaceTrackManagementBuilder
-	BuildRacetrack() models.RaceTrackManagement
-}
+import (
+	"geektrust/interfaces"
+	"geektrust/models"
+)
 
 type RaceTrackManagementBuilder struct {
 	RaceTracks []*models.RaceTrack
@@ -17,7 +12,7 @@ type RaceTrackManagementBuilder struct {
 func (rcm *RaceTrackManagementBuilder) AddRacetrackForVechicleAndRacetrackType(
 	vechicleType models.VehicleType,
 	racetrackType models.RacetrackType,
-	times int) IRaceTrackManagementBuilder {
+	times int) interfaces.IRaceTrackManagementBuilder {
 	for idx := 1; idx <= times; idx++ {
 		raceTrackForVehicleType := &models.RaceTrack{
 			AllowedVehicleType: vechicleType,

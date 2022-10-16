@@ -6,15 +6,15 @@ import (
 	"os"
 	"strings"
 
+	"geektrust/builders"
 	"geektrust/commands"
 	"geektrust/controllers"
-	"geektrust/interfaces"
 	"geektrust/models"
 	"geektrust/services"
 )
 
 func initServiceContainer() commands.CommandExecutor {
-	raceTrackManagementBuilder := interfaces.RaceTrackManagementBuilder{
+	raceTrackManagementBuilder := builders.RaceTrackManagementBuilder{
 		RaceTracks: make([]*models.RaceTrack, 0),
 	}
 	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.BIKE, models.REGULAR, 4)

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"geektrust/interfaces"
+	"geektrust/builders"
 	"geektrust/models"
 )
 
@@ -408,7 +408,7 @@ func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
 }
 
 func initMockRaceTrackManagement() models.RaceTrackManagement {
-	mock := interfaces.RaceTrackManagementBuilder{
+	mock := builders.RaceTrackManagementBuilder{
 		RaceTracks: make([]*models.RaceTrack, 0),
 	}
 	mock.AddRacetrackForVechicleAndRacetrackType(models.BIKE, models.REGULAR, 4)
