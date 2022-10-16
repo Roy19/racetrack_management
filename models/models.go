@@ -31,6 +31,14 @@ type RaceTrackManagement struct {
 	RaceTracks []*RaceTrack
 }
 
+func (rcm *RaceTrackManagement) GetTotalSlotsBooked() int {
+	totalSlotsBooked := 0
+	for _, v := range rcm.RaceTracks {
+		totalSlotsBooked += len(v.BookedSlots)
+	}
+	return totalSlotsBooked
+}
+
 func (rcm *RaceTrackManagement) GetRacetrackForVehicleType(vehicleType VehicleType) []*RaceTrack {
 	var raceTracks []*RaceTrack
 	if vehicleType == BIKE {
