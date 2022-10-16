@@ -6,8 +6,16 @@ type Command struct {
 	Type string
 }
 
-func (c Command) VerifyCommand() bool {
-	return c.Type == BOOKCOMMAND || c.Type == ADDITIONALCOMMAND || c.Type == REVENUECOMMAND
+func (b Command) VerifyCommand() bool {
+	return b.Type == BOOKCOMMAND || b.Type == ADDITIONALCOMMAND || b.Type == REVENUECOMMAND
+}
+
+func (b Command) CheckIfSame(command Command) bool {
+	if b.Type == command.Type {
+		return true
+	} else {
+		return false
+	}
 }
 
 type BookCommand struct {
@@ -29,6 +37,22 @@ func (b BookCommand) VerifyCommand() bool {
 	return err == nil && t.After(GetValidBookingStartTime()) && t.Before(GetValidBookingEndTime())
 }
 
+func (b BookCommand) CheckIfSame(command BookCommand) bool {
+	if !b.CommandType.CheckIfSame(command.CommandType) {
+		return false
+	}
+	if b.VehicleType != command.VehicleType {
+		return false
+	}
+	if b.VehicleNumber != command.VehicleNumber {
+		return false
+	}
+	if b.EntryTime != command.EntryTime {
+		return false
+	}
+	return true
+}
+
 type AdditionalCommand struct {
 	CommandType   Command
 	VehicleNumber string
@@ -42,4 +66,17 @@ func (a AdditionalCommand) VerifyCommand() bool {
 	a.ExitTime += ":00"
 	t, err := time.Parse("15:04:05", a.ExitTime)
 	return err == nil && t.Before(GetValidEndTime())
+}
+
+func (a AdditionalCommand) CheckIfSame(command AdditionalCommand) bool {
+	if !a.CommandType.CheckIfSame(command.CommandType) {
+		return false
+	}
+	if a.VehicleNumber != command.VehicleNumber {
+		return false
+	}
+	if a.ExitTime != command.ExitTime {
+		return false
+	}
+	return true
 }

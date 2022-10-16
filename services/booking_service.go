@@ -1,6 +1,10 @@
 package services
 
-import "github.com/Roy19/racetrack-management/models"
+import (
+	"time"
+
+	"github.com/Roy19/racetrack-management/models"
+)
 
 type BookingService struct {
 	raceTrackManagement *models.RaceTrackManagement
@@ -10,6 +14,18 @@ func (b *BookingService) TryBookingSlot(slotToBook *models.BookedSlot) bool {
 	racetracks := b.raceTrackManagement.GetRacetrackForVehicleType(slotToBook.Vehicle.VehicleType)
 	return tryToBookSlotType(racetracks, models.REGULAR, slotToBook) ||
 		tryToBookSlotType(racetracks, models.VIP, slotToBook)
+}
+
+func (b *BookingService) AdditionalTimeForVehicle(vehicleNumber string, exitTime time.Time) bool {
+	for _, v := range b.raceTrackManagement.RaceTracks {
+		for _, slot := range v.BookedSlots {
+			if slot.Vehicle.IdentificationNumber == vehicleNumber {
+				slot.EndTime = exitTime
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func tryToBookSlotType(racetracks []*models.RaceTrack, trackType models.RacetrackType,
