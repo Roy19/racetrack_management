@@ -233,9 +233,111 @@ func TestCalculateRevenueWithMultipleSlotsBooked(t *testing.T) {
 	expected2 := 750
 	if regularRevenue != expected1 || vipRevenue != expected2 {
 		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBooked",
-			slot1, regularRevenue, expected1)
+			mockRaceTrackManagement, regularRevenue, expected1)
 		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBooked",
-			slot1, vipRevenue, expected2)
+			mockRaceTrackManagement, vipRevenue, expected2)
+	}
+	got := mockRaceTrackManagement.GetTotalSlotsBooked()
+	want := 6
+	if got != want {
+		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBooked",
+			mockRaceTrackManagement, got, want)
+	}
+}
+
+func TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge(t *testing.T) {
+	mockRaceTrackManagement := initMockRaceTrackManagement()
+	revenueService := RevenueService{
+		raceTrackManagement: &mockRaceTrackManagement,
+	}
+	bookingService := BookingService{
+		raceTrackManagement: &mockRaceTrackManagement,
+	}
+	duration := 3
+	vehicle := models.CAR
+	t1, _ := time.Parse("15:04:05", "13:00:00")
+	t2 := t1.Add(time.Hour*time.Duration(duration) + time.Minute*time.Duration(10))
+	slot1 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          vehicle,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	t1, _ = time.Parse("15:04:05", "14:00:00")
+	t2 = t1.Add(time.Hour * time.Duration(duration))
+	slot2 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          vehicle,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	t1, _ = time.Parse("15:04:05", "15:00:00")
+	t2 = t1.Add(time.Hour*time.Duration(duration) + time.Minute*time.Duration(15))
+	slot3 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          vehicle,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	t1, _ = time.Parse("15:04:05", "16:11:00")
+	t2 = t1.Add(time.Hour * time.Duration(duration))
+	slot4 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          vehicle,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	t1, _ = time.Parse("15:04:05", "18:00:00")
+	t2 = t1.Add(time.Hour * time.Duration(duration))
+	slot5 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          vehicle,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	t1, _ = time.Parse("15:04:05", "16:00:05")
+	t2 = t1.Add(time.Hour*time.Duration(duration) + time.Minute*time.Duration(5))
+	slot6 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          models.SUV,
+			IdentificationNumber: "XY2",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+
+	bookingService.TryBookingSlot(&slot1)
+	bookingService.TryBookingSlot(&slot2)
+	bookingService.TryBookingSlot(&slot3)
+	bookingService.TryBookingSlot(&slot4)
+	bookingService.TryBookingSlot(&slot5)
+	bookingService.TryBookingSlot(&slot6)
+
+	regularRevenue, vipRevenue := revenueService.CalculateRevenue()
+	expected1 := 2040
+	expected2 := 750
+	if regularRevenue != expected1 || vipRevenue != expected2 {
+		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge",
+			mockRaceTrackManagement, regularRevenue, expected1)
+		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge",
+			mockRaceTrackManagement, vipRevenue, expected2)
+	}
+
+	got := mockRaceTrackManagement.GetTotalSlotsBooked()
+	want := 6
+	if got != want {
+		t.Errorf(error_format_string, "TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge",
+			mockRaceTrackManagement, got, want)
 	}
 }
 
@@ -250,7 +352,8 @@ func TestCalculateRevenue(t *testing.T) {
 	duration := 3
 	vehicle := models.BIKE
 	t1, _ := time.Parse("15:04:05", "13:00:00")
-	t2 := t1.Add(time.Hour * time.Duration(duration))
+	t2 := t1.Add(time.Hour*time.Duration(duration) +
+		time.Minute*time.Duration(15))
 	slot1 := models.BookedSlot{
 		Vehicle: &models.Vehicle{
 			VehicleType:          models.BIKE,
@@ -267,6 +370,39 @@ func TestCalculateRevenue(t *testing.T) {
 		t.Errorf(error_format_string, "TestCalculateRevenue",
 			slot1, regularRevenue, expected1)
 		t.Errorf(error_format_string, "TestCalculateRevenue",
+			slot1, vipRevenue, expected2)
+	}
+}
+
+func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
+	mockRaceTrackManagement := initMockRaceTrackManagement()
+	revenueService := RevenueService{
+		raceTrackManagement: &mockRaceTrackManagement,
+	}
+	bookingService := BookingService{
+		raceTrackManagement: &mockRaceTrackManagement,
+	}
+	duration := 3
+	vehicle := models.BIKE
+	t1, _ := time.Parse("15:04:05", "13:00:00")
+	t2 := t1.Add(time.Hour*time.Duration(duration) +
+		time.Minute*time.Duration(20))
+	slot1 := models.BookedSlot{
+		Vehicle: &models.Vehicle{
+			VehicleType:          models.BIKE,
+			IdentificationNumber: "XY1",
+		},
+		StartTime: t1,
+		EndTime:   t2,
+	}
+	bookingService.TryBookingSlot(&slot1)
+	regularRevenue, vipRevenue := revenueService.CalculateRevenue()
+	expected1 := (duration + 1) * models.GetChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
+	expected2 := 0
+	if regularRevenue != expected1 || vipRevenue != expected2 {
+		t.Errorf(error_format_string, "TestCalculateRevenueOverNormalTimeCharedNextHour",
+			slot1, regularRevenue, expected1)
+		t.Errorf(error_format_string, "TestCalculateRevenueOverNormalTimeCharedNextHour",
 			slot1, vipRevenue, expected2)
 	}
 }

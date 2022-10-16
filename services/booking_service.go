@@ -8,10 +8,19 @@ type BookingService struct {
 
 func (b *BookingService) TryBookingSlot(slotToBook *models.BookedSlot) bool {
 	racetracks := b.raceTrackManagement.GetRacetrackForVehicleType(slotToBook.Vehicle.VehicleType)
+	return tryToBookSlotType(racetracks, models.REGULAR, slotToBook) ||
+		tryToBookSlotType(racetracks, models.VIP, slotToBook)
+}
+
+func tryToBookSlotType(racetracks []*models.RaceTrack, trackType models.RacetrackType,
+	slotToBook *models.BookedSlot) bool {
 	for _, racetrack := range racetracks {
-		if checkIfSlotCanBeAllocated(racetrack.BookedSlots, slotToBook) {
-			racetrack.AppendBookedSlot(slotToBook)
-			return true
+		if racetrack.RaceTrackType == trackType &&
+			racetrack.AllowedVehicleType == slotToBook.Vehicle.VehicleType {
+			if checkIfSlotCanBeAllocated(racetrack.BookedSlots, slotToBook) {
+				racetrack.AppendBookedSlot(slotToBook)
+				return true
+			}
 		}
 	}
 	return false
