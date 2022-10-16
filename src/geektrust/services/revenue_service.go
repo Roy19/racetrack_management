@@ -4,16 +4,16 @@ import (
 	"math"
 	"time"
 
-	"github.com/Roy19/racetrack-management/models"
+	"geektrust/models"
 )
 
 type RevenueService struct {
-	raceTrackManagement *models.RaceTrackManagement
+	RaceTrackManagement *models.RaceTrackManagement
 }
 
 func (rs *RevenueService) CalculateRevenue() (int, int) {
-	regularTrackRevenue := calculateRevenueForTrack(rs.raceTrackManagement, models.REGULAR)
-	vipTrackRevenue := calculateRevenueForTrack(rs.raceTrackManagement, models.VIP)
+	regularTrackRevenue := calculateRevenueForTrack(rs.RaceTrackManagement, models.REGULAR)
+	vipTrackRevenue := calculateRevenueForTrack(rs.RaceTrackManagement, models.VIP)
 	return regularTrackRevenue, vipTrackRevenue
 }
 

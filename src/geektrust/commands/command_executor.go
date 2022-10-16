@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Roy19/racetrack-management/interfaces"
+	"geektrust/interfaces"
 )
 
 type CommandExecutor struct {
@@ -36,6 +36,9 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 	}
 	var command interfaces.ICommand
 	if tokens[0] == BOOKCOMMAND {
+		if len(tokens) < 4 {
+			return nil, errors.New("invalid booking command")
+		}
 		command = BookCommand{
 			CommandType: Command{
 				Type: tokens[0],
@@ -44,11 +47,11 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 			VehicleNumber: tokens[2],
 			EntryTime:     tokens[3],
 		}
-		if !command.VerifyCommand() {
-			return nil, errors.New("invalid booking command")
-		}
 	}
 	if tokens[0] == ADDITIONALCOMMAND {
+		if len(tokens) < 3 {
+			return nil, errors.New("invalid additional command")
+		}
 		command = AdditionalCommand{
 			CommandType: Command{
 				Type: tokens[0],
@@ -56,16 +59,13 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 			VehicleNumber: tokens[1],
 			ExitTime:      tokens[2],
 		}
-		if !command.VerifyCommand() {
-			return nil, errors.New("invalid additional command")
-		}
 	}
 	if tokens[0] == REVENUECOMMAND {
+		if len(tokens) < 1 {
+			return nil, errors.New("invalid revenue command")
+		}
 		command = Command{
 			Type: REVENUECOMMAND,
-		}
-		if !command.VerifyCommand() {
-			return nil, errors.New("invalid revenue command")
 		}
 	}
 	return command, nil

@@ -1,2 +1,5 @@
 *.DS_Store
 .devcontainer/*
+bin/*
+pkg/*
+.vscode/*

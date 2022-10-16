@@ -1,6 +1,6 @@
 package interfaces
 
-import "github.com/Roy19/racetrack-management/models"
+import "geektrust/models"
 
 type IRaceTrack interface {
 	CheckAvailability(slot *models.BookedSlot) bool

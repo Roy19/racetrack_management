@@ -3,7 +3,7 @@ package commands
 import (
 	"time"
 
-	"github.com/Roy19/racetrack-management/interfaces"
+	"geektrust/interfaces"
 )
 
 type Command struct {

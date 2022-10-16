@@ -3,7 +3,7 @@ package interfaces
 import (
 	"time"
 
-	"github.com/Roy19/racetrack-management/models"
+	"geektrust/models"
 )
 
 type IBookingService interface {

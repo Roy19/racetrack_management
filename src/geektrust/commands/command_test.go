@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Roy19/racetrack-management/interfaces"
+	"geektrust/interfaces"
 )
 
 const error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: %v\n"
@@ -207,12 +207,12 @@ var (
 			err: nil,
 		},
 		{
-			tokens: []string{"BOOK", "BIKE", "M40", "11:00"},
+			tokens: []string{"BOOK", "BIKE", "M40"},
 			result: nil,
 			err:    errors.New("invalid booking command"),
 		},
 		{
-			tokens: []string{"ADDITIONAL", "O34", "20:50"},
+			tokens: []string{"ADDITIONAL", "20:50"},
 			result: nil,
 			err:    errors.New("invalid additional command"),
 		},
@@ -220,6 +220,11 @@ var (
 			tokens: []string{},
 			result: nil,
 			err:    errors.New("empty commands not allowed"),
+		},
+		{
+			tokens: []string{"BOOK", "A66", "11:00"},
+			result: nil,
+			err:    errors.New("invalid booking command"),
 		},
 	}
 )

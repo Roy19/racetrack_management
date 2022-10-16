@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Roy19/racetrack-management/interfaces"
-	"github.com/Roy19/racetrack-management/models"
+	"geektrust/interfaces"
+	"geektrust/models"
 )
 
 const error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: %v\n"
@@ -13,7 +13,7 @@ const error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: 
 func TestTryBookingSlot(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	t1, _ := time.Parse("15:04:05", "13:00:00")
 	t2 := t1.Add(time.Hour * time.Duration(3))
@@ -39,7 +39,7 @@ func TestTryBookingSlot(t *testing.T) {
 func TestCantBookSameSlotIfNotAvailable(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	t1, _ := time.Parse("15:04:05", "13:00:00")
 	t2 := t1.Add(time.Hour * time.Duration(3))
@@ -73,7 +73,7 @@ func TestCantBookSameSlotIfNotAvailable(t *testing.T) {
 func TestTryBookingDifferentSlots(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	t1, _ := time.Parse("15:04:05", "13:00:00")
 	t2 := t1.Add(time.Hour * time.Duration(3))
@@ -153,10 +153,10 @@ func checkBookedSlotsCount(raceTrackManagement *models.RaceTrackManagement,
 func TestCalculateRevenueWithMultipleSlotsBooked(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	revenueService := RevenueService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	duration := 3
 	vehicle := models.CAR
@@ -248,10 +248,10 @@ func TestCalculateRevenueWithMultipleSlotsBooked(t *testing.T) {
 func TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	revenueService := RevenueService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	duration := 3
 	vehicle := models.CAR
@@ -344,10 +344,10 @@ func TestCalculateRevenueWithMultipleSlotsBookedNoExtraCharge(t *testing.T) {
 func TestCalculateRevenue(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	revenueService := RevenueService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	duration := 3
 	vehicle := models.BIKE
@@ -377,10 +377,10 @@ func TestCalculateRevenue(t *testing.T) {
 func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
 	revenueService := RevenueService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	bookingService := BookingService{
-		raceTrackManagement: &mockRaceTrackManagement,
+		RaceTrackManagement: &mockRaceTrackManagement,
 	}
 	duration := 3
 	vehicle := models.BIKE
