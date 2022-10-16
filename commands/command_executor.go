@@ -53,8 +53,8 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 			CommandType: Command{
 				Type: tokens[0],
 			},
-			VehicleNumber: tokens[2],
-			ExitTime:      tokens[3],
+			VehicleNumber: tokens[1],
+			ExitTime:      tokens[2],
 		}
 		if !command.VerifyCommand() {
 			return nil, errors.New("invalid additional command")

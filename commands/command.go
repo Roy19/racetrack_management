@@ -1,6 +1,10 @@
 package commands
 
-import "time"
+import (
+	"time"
+
+	"github.com/Roy19/racetrack-management/interfaces"
+)
 
 type Command struct {
 	Type string
@@ -10,8 +14,8 @@ func (b Command) VerifyCommand() bool {
 	return b.Type == BOOKCOMMAND || b.Type == ADDITIONALCOMMAND || b.Type == REVENUECOMMAND
 }
 
-func (b Command) CheckIfSame(command Command) bool {
-	if b.Type == command.Type {
+func (b Command) CheckIfSame(command interfaces.ICommand) bool {
+	if b.Type == command.(Command).Type {
 		return true
 	} else {
 		return false
@@ -37,17 +41,17 @@ func (b BookCommand) VerifyCommand() bool {
 	return err == nil && t.After(GetValidBookingStartTime()) && t.Before(GetValidBookingEndTime())
 }
 
-func (b BookCommand) CheckIfSame(command BookCommand) bool {
-	if !b.CommandType.CheckIfSame(command.CommandType) {
+func (b BookCommand) CheckIfSame(command interfaces.ICommand) bool {
+	if !b.CommandType.CheckIfSame(command.(BookCommand).CommandType) {
 		return false
 	}
-	if b.VehicleType != command.VehicleType {
+	if b.VehicleType != command.(BookCommand).VehicleType {
 		return false
 	}
-	if b.VehicleNumber != command.VehicleNumber {
+	if b.VehicleNumber != command.(BookCommand).VehicleNumber {
 		return false
 	}
-	if b.EntryTime != command.EntryTime {
+	if b.EntryTime != command.(BookCommand).EntryTime {
 		return false
 	}
 	return true
@@ -68,14 +72,14 @@ func (a AdditionalCommand) VerifyCommand() bool {
 	return err == nil && t.Before(GetValidEndTime())
 }
 
-func (a AdditionalCommand) CheckIfSame(command AdditionalCommand) bool {
-	if !a.CommandType.CheckIfSame(command.CommandType) {
+func (a AdditionalCommand) CheckIfSame(command interfaces.ICommand) bool {
+	if !a.CommandType.CheckIfSame(command.(AdditionalCommand).CommandType) {
 		return false
 	}
-	if a.VehicleNumber != command.VehicleNumber {
+	if a.VehicleNumber != command.(AdditionalCommand).VehicleNumber {
 		return false
 	}
-	if a.ExitTime != command.ExitTime {
+	if a.ExitTime != command.(AdditionalCommand).ExitTime {
 		return false
 	}
 	return true
