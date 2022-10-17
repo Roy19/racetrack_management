@@ -18,6 +18,7 @@ const (
 	carTrackVipCostPerHour      int = 250
 	suvTrackRegularCostPerHour  int = 200
 	suvTrackVipCostPerHour      int = 300
+	additionalCostPerHour       int = 50
 )
 
 type RevenueService struct {
@@ -39,8 +40,9 @@ func calculateRevenueForTrack(raceTracks *models.RaceTrackManagement,
 				t := slot.StartTime.Add(time.Duration(defaultHours)*time.Hour +
 					time.Duration(defaultMinutes)*time.Minute)
 				diff := slot.EndTime.Sub(t)
-				totalRevenue += (defaultHours + int(math.Ceil(math.Max(0, diff.Hours())))) *
-					getChargeGivenTrackAndVehicleType(v.AllowedVehicleType, v.RaceTrackType)
+				totalRevenue += (defaultHours *
+					getChargeGivenTrackAndVehicleType(v.AllowedVehicleType, v.RaceTrackType)) +
+					(int(math.Ceil(math.Max(0, diff.Hours()))) * additionalCostPerHour)
 			}
 		}
 	}

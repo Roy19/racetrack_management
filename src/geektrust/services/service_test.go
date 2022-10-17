@@ -434,7 +434,7 @@ func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
 		time.Minute*time.Duration(20))
 	slot1 := models.BookedSlot{
 		Vehicle: &models.Vehicle{
-			VehicleType:          models.BIKE,
+			VehicleType:          vehicle,
 			IdentificationNumber: "XY1",
 		},
 		StartTime: t1,
@@ -442,7 +442,7 @@ func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
 	}
 	bookingService.TryBookingSlot(&slot1)
 	regularRevenue, vipRevenue := revenueService.CalculateRevenue()
-	expected1 := (duration + 1) * getChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
+	expected1 := 230
 	expected2 := 0
 	if regularRevenue != expected1 || vipRevenue != expected2 {
 		t.Errorf(error_format_string, "TestCalculateRevenueOverNormalTimeCharedNextHour",
