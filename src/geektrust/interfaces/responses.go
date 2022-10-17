@@ -11,17 +11,16 @@ const (
 )
 
 func (cer CommandExecutionResult) GetStringResult() string {
-	if cer == INVALID_ENTRY_TIME {
+	switch cer {
+	case INVALID_ENTRY_TIME:
 		return "INVALID_ENTRY_TIME"
-	}
-	if cer == INVALID_EXIT_TIME {
+	case INVALID_EXIT_TIME:
 		return "INVALID_EXIT_TIME"
-	}
-	if cer == RACETRACK_FULL {
+	case RACETRACK_FULL:
 		return "RACETRACK_FULL"
-	}
-	if cer == SUCCESS {
+	case SUCCESS:
 		return "SUCCESS"
+	default:
+		return "INVALID_COMMAND_RESULT"
 	}
-	return "INVALID_COMMAND_RESULT"
 }
