@@ -8,7 +8,52 @@ import (
 	"geektrust/models"
 )
 
-const error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: %v\n"
+type chargesTestTable struct {
+	vehicleType   models.VehicleType
+	raceTrackType models.RacetrackType
+	chargePerHour int
+}
+
+var (
+	inputTable []chargesTestTable = []chargesTestTable{
+		{
+			vehicleType:   models.BIKE,
+			raceTrackType: models.REGULAR,
+			chargePerHour: bikeTrackRegularCostPerHour,
+		},
+		{
+			vehicleType:   models.CAR,
+			raceTrackType: models.REGULAR,
+			chargePerHour: carTrackRegularCostPerHour,
+		},
+		{
+			vehicleType:   models.SUV,
+			raceTrackType: models.REGULAR,
+			chargePerHour: suvTrackRegularCostPerHour,
+		},
+		{
+			vehicleType:   models.CAR,
+			raceTrackType: models.VIP,
+			chargePerHour: carTrackVipCostPerHour,
+		},
+		{
+			vehicleType:   models.SUV,
+			raceTrackType: models.VIP,
+			chargePerHour: suvTrackVipCostPerHour,
+		},
+	}
+	error_format_string = "Failed in method %v. Input: %v, Got: %v, Expected: %v\n"
+)
+
+func TestGetChargeGivenTrackAndVehicleType(t *testing.T) {
+	for _, v := range inputTable {
+		got := getChargeGivenTrackAndVehicleType(v.vehicleType, v.raceTrackType)
+		expected := v.chargePerHour
+		if got != expected {
+			t.Errorf(error_format_string, "TestGetChargeGivenTrackAndVehicleType", v, got, expected)
+		}
+	}
+}
 
 func TestTryBookingSlot(t *testing.T) {
 	mockRaceTrackManagement := initMockRaceTrackManagement()
@@ -364,7 +409,7 @@ func TestCalculateRevenue(t *testing.T) {
 	}
 	bookingService.TryBookingSlot(&slot1)
 	regularRevenue, vipRevenue := revenueService.CalculateRevenue()
-	expected1 := duration * models.GetChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
+	expected1 := duration * getChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
 	expected2 := 0
 	if regularRevenue != expected1 || vipRevenue != expected2 {
 		t.Errorf(error_format_string, "TestCalculateRevenue",
@@ -397,7 +442,7 @@ func TestCalculateRevenueOverNormalTimeCharedNextHour(t *testing.T) {
 	}
 	bookingService.TryBookingSlot(&slot1)
 	regularRevenue, vipRevenue := revenueService.CalculateRevenue()
-	expected1 := (duration + 1) * models.GetChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
+	expected1 := (duration + 1) * getChargeGivenTrackAndVehicleType(vehicle, models.REGULAR)
 	expected2 := 0
 	if regularRevenue != expected1 || vipRevenue != expected2 {
 		t.Errorf(error_format_string, "TestCalculateRevenueOverNormalTimeCharedNextHour",
