@@ -35,7 +35,8 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 		return nil, errors.New("empty commands not allowed")
 	}
 	var command interfaces.ICommand
-	if tokens[0] == BOOKCOMMAND {
+	switch tokens[0] {
+	case BOOKCOMMAND:
 		if len(tokens) < 4 {
 			return nil, errors.New("invalid booking command")
 		}
@@ -47,8 +48,7 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 			VehicleNumber: tokens[2],
 			EntryTime:     tokens[3],
 		}
-	}
-	if tokens[0] == ADDITIONALCOMMAND {
+	case ADDITIONALCOMMAND:
 		if len(tokens) < 3 {
 			return nil, errors.New("invalid additional command")
 		}
@@ -59,8 +59,7 @@ func createCommandAndVerify(tokens []string) (interfaces.ICommand, error) {
 			VehicleNumber: tokens[1],
 			ExitTime:      tokens[2],
 		}
-	}
-	if tokens[0] == REVENUECOMMAND {
+	case REVENUECOMMAND:
 		if len(tokens) < 1 {
 			return nil, errors.New("invalid revenue command")
 		}
