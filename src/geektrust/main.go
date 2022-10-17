@@ -13,15 +13,24 @@ import (
 	"geektrust/services"
 )
 
+const (
+	regularBikeTracks int = 4
+	regularCarTracks  int = 2
+	regularSuvTracks  int = 2
+
+	vipCarTracks int = 1
+	vipSuvTracks int = 1
+)
+
 func initServiceContainer() commands.CommandExecutor {
 	raceTrackManagementBuilder := builders.RaceTrackManagementBuilder{
 		RaceTracks: make([]*models.RaceTrack, 0),
 	}
-	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.BIKE, models.REGULAR, 4)
-	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.CAR, models.REGULAR, 2)
-	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.CAR, models.VIP, 1)
-	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.SUV, models.REGULAR, 2)
-	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.SUV, models.VIP, 1)
+	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.BIKE, models.REGULAR, regularBikeTracks)
+	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.CAR, models.REGULAR, regularCarTracks)
+	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.CAR, models.VIP, vipCarTracks)
+	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.SUV, models.REGULAR, regularSuvTracks)
+	raceTrackManagementBuilder.AddRacetrackForVechicleAndRacetrackType(models.SUV, models.VIP, vipSuvTracks)
 	raceTrackManagement := raceTrackManagementBuilder.BuildRacetrack()
 	bookingService := services.BookingService{
 		RaceTrackManagement: &raceTrackManagement,
@@ -63,7 +72,6 @@ func main() {
 	commandExecutor := initServiceContainer()
 	for scanner.Scan() {
 		tokens := strings.Split(scanner.Text(), " ")
-		//fmt.Println(tokens)
 		commandExecutor.ExecutorCommand(tokens)
 	}
 }
